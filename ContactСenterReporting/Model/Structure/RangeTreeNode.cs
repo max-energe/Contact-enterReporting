@@ -99,7 +99,7 @@ namespace ContactСenterReporting.Model
                 {
                     if (comparer.Compare(o.From, value) > 0)
                         break;
-                    else if (comparer.Compare(value, o.From) >= 0 && comparer.Compare(value, o.To) <= 0)
+                    else if (comparer.Compare(value, o.From) >= 0 && comparer.Compare(value, o.To) < 0) 
                     {
                         results.Add(o);
                     }
