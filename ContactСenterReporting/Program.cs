@@ -69,7 +69,7 @@ namespace ContactСenterReporting
                 loadStatistics.Add(new DateTime(group.Key.Year, group.Key.Month, group.Key.Day), sordedRangeDates.Select(x => tree[x].Count()).Max());
             }
 
-            Console.WriteLine("##### ЗАДАНИЕ 1 #####");
+            Console.WriteLine("##### ПРИМЕР 1 #####");
 
             foreach (var day in loadStatistics)
             {
@@ -92,16 +92,36 @@ namespace ContactСenterReporting
                             .Select(r => new
                             {
                                 Operator = r.Key.ToString(),
-                                SetState = new StateDictionary<State, double>(r.Select(h => new KeyValuePair<State, double>(h.State, h.TimeSpan)))
+                                SetState = new Dictionary<State, double>(r.Select(h => new KeyValuePair<State, double>(h.State, h.TimeSpan))) 
                             });
 
-            Console.WriteLine("##### ЗАДАНИЕ 2 #####");
+            Console.WriteLine("##### ПРИМЕР 2 #####");
             foreach (var _operator in operatores)
             {
-                Console.WriteLine("{0}  {1}", _operator.Operator, _operator.SetState.ToString());
+                Console.WriteLine("{0}  {1}", _operator.Operator, GetDurationSessions(_operator.SetState));
             }
         }
+        /// <summary>
+        /// Получение общей продолжительности сессии для всех <see cref="State"/> в виде <see cref="String"/>
+        /// </summary>
+        /// <param name="dicState"></param>
+        /// <returns></returns>
+        private static string GetDurationSessions(Dictionary<State, double> dicState)
+        {
+            string result = string.Empty;
+            var ef = dicState.ToList();
 
+            foreach (var state in Enum.GetNames(typeof(State)))
+            {
+                if (dicState.Count(x => x.Key.ToString() == state) != 0)
+                    result += $"{state}: {Math.Round(Convert.ToDouble(dicState.First(x => x.Key.ToString() == state).Value), 2)} ";
+                else
+                    result += $"{state}: 0 ";
+            }
+
+
+            return result;
+        }
         private static string GetTimeOperation() 
         {
             stopWatch.Stop();
